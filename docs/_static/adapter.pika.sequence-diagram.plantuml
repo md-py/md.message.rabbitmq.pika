@@ -1,0 +1,56 @@
+@startuml
+
+queue "RabbitMQ" as mq
+participant Consumer as consumer
+participant "threading.Thread" as thread
+queue "Internal FIFO" as imq
+participant Receive
+participant Application as app
+participant "md.message.MessageHandlerInterface" as MessageHandler
+
+== initialization ==
+
+Receive -> thread : starts
+thread ->> consumer : starts
+
+== message consumption ==
+
+loop
+  consumer ->> mq : asks for a message
+  note right
+    awaits consumed messages will be processed
+  end note
+
+  mq -->> consumer : returns a message
+  consumer -> imq : pushes a message
+end
+
+== message processing ==
+
+loop
+  app -> Receive: asks for a message
+  Receive -> imq : retrieves a message
+  imq --> Receive: returns a message
+  Receive --> app : returns a message
+  app -> MessageHandler : handles a message
+
+  alt success
+    MessageHandler --> app : handles successful
+    app --> Receive : handles successful
+    Receive -> consumer : accepts a message
+    consumer ->> mq : accepts a message
+  else failure
+    MessageHandler -> MessageHandler : raises an exception
+    MessageHandler -> app : excepts an exception
+    app -> Receive : excepts an exception
+
+    alt retry exception
+      Receive -> consumer : rejects a message
+      consumer ->> mq : rejects a message
+    else
+      Receive -> Receive : stop working
+    end
+  end
+end
+
+@enduml

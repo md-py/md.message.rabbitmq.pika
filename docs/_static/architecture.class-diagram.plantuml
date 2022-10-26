@@ -1,0 +1,98 @@
+@startuml
+
+skinparam class {
+  BackgroundColor #ebebeb
+  ArrowColor      #333
+  BorderColor     #333
+}
+
+skinparam lineType ortho
+
+package md.message {
+  interface MessageInterface {
+    + get_payload() -> typing.Any
+  }
+
+  interface SendInterface {
+    + send(message: MessageInterface) -> None
+  }
+
+  interface ReceiveInterface{
+    + receive() -> typing.Iterable[MessageInterface]
+    --
+    + accept(message: MessageInterface) -> None
+    + reject(message: MessageInterface) -> None
+  }
+
+  interface HandleInterface {
+    + handle(message: MessageInterface) -> None
+  }
+
+  class ReceiveApplication {
+    - receive_message: ReceiveInterface
+    - handle_message: HandleInterface
+    - retry_message_exception: typing.Tuple[typing.Union[Exception, type]]
+    ---
+    + run() -> None
+  }
+}
+
+
+SendInterface -- MessageInterface : "Sends >"
+HandleInterface --- MessageInterface : "Handles >"
+ReceiveInterface -- MessageInterface : "Receives >"
+
+ReceiveApplication *-> ReceiveInterface
+ReceiveApplication *-> HandleInterface
+
+
+package md.message.rabbitmq.pika {
+  class Message implements MessageInterface {
+    - channel: pika.channel.Channel
+    - method_frame: pika.spec.Basic.Deliver
+    - header_frame: pika.spec.BasicProperties
+    - body: bytes
+    ---
+    + get_payload() -> bytes
+  }
+
+  class Send implements SendInterface {
+    - connection: pika.BlockingConnection
+    - exchange: str
+    - routing_key: str
+    ---
+    + send(message: md.message.MessageInterface) -> None
+  }
+
+  class Consumer {
+    - connection: pika.BlockingConnection,
+    - internal_queue: queue.Queue
+    - queue_name: str
+    - prefetch_count: int
+    - queue_durable: bool
+    - message_requeue: bool
+    ---
+    + run() -> None
+    + stop() -> None
+    + accept(channel: pika.channel.Channel, method: pika.spec.Basic.Deliver) -> None
+    + reject(channel: pika.channel.Channel, method: pika.spec.Basic.Deliver) -> None
+  }
+
+  class Receive implements ReceiveInterface {
+      - consumer: Consumer
+      - internal_queue: queue.Queue
+      ---
+      + start() -> None
+      + stop() -> None
+      + receive() -> typing.Iterable[md.message.MessageInterface]
+      + accept(message: Message) -> None
+      + reject(message: Message) -> None
+  }
+
+  Receive *--> Consumer
+'  Send -- Message
+'  Receive -- Message
+}
+
+
+@enduml
