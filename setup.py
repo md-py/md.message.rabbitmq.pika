@@ -5,7 +5,7 @@ with open('readme.md') as fh:
 
 setuptools.setup(
     name='md.message.rabbitmq.pika',
-    version='0.1.0',
+    version='0.2.0',
     description='Provides rabbitmq client implementation of md.message contract on top of pika',
     long_description=long_description,
     long_description_content_type='text/markdown',

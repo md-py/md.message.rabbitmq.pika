@@ -11,7 +11,7 @@ import md.message
 
 # Meta
 __author__ = 'https://md.land/md'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __all__ = (
     # Meta
     '__author__',
@@ -28,10 +28,10 @@ __all__ = (
 class Message(md.message.MessageInterface):
     def __init__(
         self,
-        channel: pika.channel.Channel,
-        method_frame: pika.spec.Basic.Deliver,
-        header_frame: pika.spec.BasicProperties,
         body: bytes,
+        channel: pika.channel.Channel = None,
+        method_frame: pika.spec.Basic.Deliver = None,
+        header_frame: pika.spec.BasicProperties = None,
     ) -> None:
         self.channel = channel
         self.method_frame = method_frame
