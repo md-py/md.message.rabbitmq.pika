@@ -31,7 +31,7 @@ package md.message {
   class ReceiveApplication {
     - receive_message: ReceiveInterface
     - handle_message: HandleInterface
-    - retry_message_exception: typing.Tuple[typing.Union[Exception, type]]
+    - retry_exception: Union[Exception, type, Tuple[Union[Exception, type]]] = None
     ---
     + run() -> None
   }
@@ -48,10 +48,10 @@ ReceiveApplication *-> HandleInterface
 
 package md.message.rabbitmq.pika {
   class Message implements MessageInterface {
-    - channel: pika.channel.Channel
-    - method_frame: pika.spec.Basic.Deliver
-    - header_frame: pika.spec.BasicProperties
     - body: bytes
+    - channel: pika.channel.Channel = None
+    - method_frame: pika.spec.Basic.Deliver = None
+    - header_frame: pika.spec.BasicProperties = None
     ---
     + get_payload() -> bytes
   }
