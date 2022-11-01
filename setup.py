@@ -5,14 +5,14 @@ with open('readme.md') as fh:
 
 setuptools.setup(
     name='md.message.rabbitmq.pika',
-    version='0.2.0',
+    version='0.3.0',
     description='Provides rabbitmq client implementation of md.message contract on top of pika',
     long_description=long_description,
     long_description_content_type='text/markdown',
     license='License :: OSI Approved :: MIT License',
     package_dir={'': 'lib'},
     py_modules=['md.message.rabbitmq.pika'],
-    install_requires=['md.message==0.1.*', 'pika>=1.2'],
+    install_requires=['md.message==0.2.*', 'pika>=1.2'],
     dependency_links=[
         'https://source.md.land/python/md-message/'
     ],
