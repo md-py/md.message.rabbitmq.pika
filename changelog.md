@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Switch task processing finish trigger to `queue.Queue().join()` instead of `time.sleep(2.0)`
 
+## [0.3.1] - 2022-11-21
+### Fix
+#### Documentation
+
+- usage example in documentation fixed according to the latest changes 
+- typos in diagrams fixed
+
 ## [0.3.0] - 2022-11-01
 
 - Upgrade `md.message` component up to [0.2.0](https://github.com/md-py/md.message/blob/master/changelog.md#0.2.0) from
@@ -33,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Implementation initialization
 
+[0.3.1]: https://github.com/md-py/md.message.rabbitmq.pika/releases/tag/0.3.1
 [0.3.0]: https://github.com/md-py/md.message.rabbitmq.pika/releases/tag/0.3.0
 [0.2.0]: https://github.com/md-py/md.message.rabbitmq.pika/releases/tag/0.2.0
 [0.1.0]: https://github.com/md-py/md.message.rabbitmq.pika/releases/tag/0.1.0
