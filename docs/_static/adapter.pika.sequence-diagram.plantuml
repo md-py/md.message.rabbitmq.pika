@@ -6,7 +6,7 @@ participant "threading.Thread" as thread
 queue "Internal FIFO" as imq
 participant Receive
 participant Application as app
-participant "md.message.MessageHandlerInterface" as MessageHandler
+participant "md.message.HandleInterface" as MessageHandler
 
 == initialization ==
 

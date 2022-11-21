@@ -65,7 +65,7 @@ package md.message.rabbitmq.pika {
   }
 
   class Consumer {
-    - connection: pika.BlockingConnection,
+    - connection: pika.BlockingConnection
     - internal_queue: queue.Queue
     - queue_name: str
     - prefetch_count: int
@@ -82,11 +82,12 @@ package md.message.rabbitmq.pika {
       - consumer: Consumer
       - internal_queue: queue.Queue
       ---
-      + start() -> None
-      + stop() -> None
       + receive() -> typing.Iterable[md.message.MessageInterface]
       + accept(message: Message) -> None
       + reject(message: Message) -> None
+      ---
+      + start() -> None
+      + stop() -> None
   }
 
   Receive *--> Consumer

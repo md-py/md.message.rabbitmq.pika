@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Documentation
 
 - usage example in documentation fixed according to the latest changes 
+- typos in diagrams fixed
 
 ## [0.3.0] - 2022-11-01
 
