@@ -79,7 +79,7 @@ def main() -> int:
     consumer = md.message.rabbitmq.pika.Consumer(
         connection=connection,
         internal_queue=internal_queue,
-        rmq_read_queue=rmq_read_queue,
+        queue_name=rmq_read_queue,
         prefetch_count=workers_count,
     )
     message_queue_receive = md.message.rabbitmq.pika.Receive(consumer=consumer, internal_queue=internal_queue)
@@ -87,13 +87,14 @@ def main() -> int:
 
     message_handler = MessageHandler(send_queue=message_queue_send)
     application = md.message.ReceiveApplication(
-        message_queue=message_queue_receive,
-        message_handler=message_handler,
+        receive_message=message_queue_receive,
+        handle_message=message_handler,
+        retry_exception=None
     )
 
     # act
-    signal.signal(signal.SIGINT, lambda: message_queue_receive.stop)  # 2
-    signal.signal(signal.SIGTERM, lambda: message_queue_receive.stop)  # 15
+    signal.signal(signal.SIGINT, lambda: message_queue_receive.stop())  # 2
+    signal.signal(signal.SIGTERM, lambda: message_queue_receive.stop())  # 15
     thread_set = set()
     try:
         message_queue_receive.start()
